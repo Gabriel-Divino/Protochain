@@ -1,0 +1,42 @@
+<app-header></app-header>
+
+<h1 style="text-align: center;margin-top: 2%;">Carteiras</h1>
+
+<div id="buttons">
+    <button class="btn btn-primary" (click)="addWallet()">Adicionar Carteira</button>
+    <button class="btn btn-dark" (click)="recoverWallet()">Recuperar Carteira</button>
+</div>
+
+
+
+<div id="wallets"  >
+
+    <div class="card"  *ngFor="let wallet of wallets">
+        <div class="card-body">
+          <h5 class="card-title">{{wallet.name}}</h5>
+          <p>
+            Chave Pública : {{wallet.publicKey}}
+          </p>
+          <button  class="btn btn-primary" (click)="makePayments(wallet)">Fazer Pagamentos</button>
+          <br/>
+          <br/>
+        
+          <div *ngIf="mining(wallet) == false">
+            <button  class="btn btn-primary" (click)="mine(wallet)">Minerar</button>
+          </div>
+
+
+          <div *ngIf="mining(wallet) == true">
+            <button  class="btn btn-danger" (click)="pauseMining(wallet)">Pausar Mineração</button>
+            <br/>
+            <br/>
+            <button class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+              <span role="status"> Minerando...</span>
+            </button>
+          </div>
+
+        </div>
+    </div>
+
+</div>
