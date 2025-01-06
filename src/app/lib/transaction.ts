@@ -12,6 +12,8 @@ interface TransactionMessage{
     timestamp : number;
 }
 
+
+
 /**
  * Nossa classe para realizar transações na blockchain
  */
@@ -34,7 +36,7 @@ export default class Transaction{
         this.from = tx?.from || "";
         this.timestamp = tx?.timestamp || Date.now();
         this.value = tx?.value || 0;
-        this.type = tx?.type || TransactionType.REGULAR;
+        this.type = tx.type;
         this.signature = tx?.signature || "";
     }
 
@@ -63,11 +65,16 @@ export default class Transaction{
 
         const signatureIsValid : boolean = Wallet.verifySignature(message,this.signature,this.from);
 
+
+        if(this.value <= 0 ) return new Validation(false,'Value must be great zero');
+        if(this.to.length != 130)  return new Validation(false,'Invalid Wallet')
+        
         if(!signatureIsValid) return new Validation(false,"Signature is invalid");
 
         const blockchain : Blockchain = new Blockchain();
         const balance : number = blockchain.getBalance(this.from);
-        if(balance < this.value) return new Validation(false,"Insufficient balance");
+        console.log(`Saldo da conta : ${balance}`);
+        if(balance <= this.value) return new Validation(false,"Insufficient balance");
     
         return new Validation();
     }

@@ -12,21 +12,27 @@
 <div id="wallets"  >
 
     <div class="card"  *ngFor="let wallet of wallets">
+
+        {{mining(wallet)}}
+
         <div class="card-body">
           <h5 class="card-title">{{wallet.name}}</h5>
           <p>
             Chave Pública : {{wallet.publicKey}}
           </p>
+          <p>
+            <strong>Saldo :</strong> {{walletBalance(wallet)}}
+          </p>
           <button  class="btn btn-primary" (click)="makePayments(wallet)">Fazer Pagamentos</button>
           <br/>
           <br/>
         
-          <div *ngIf="mining(wallet) == false">
+          <div *ngIf="isMining(wallet) == false">
             <button  class="btn btn-primary" (click)="mine(wallet)">Minerar</button>
           </div>
 
 
-          <div *ngIf="mining(wallet) == true">
+          <div *ngIf="isMining(wallet) == true">
             <button  class="btn btn-danger" (click)="pauseMining(wallet)">Pausar Mineração</button>
             <br/>
             <br/>
