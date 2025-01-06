@@ -19,10 +19,7 @@ export class MainComponent implements OnInit {
   }
 
   createBlock(){
-    this.blockchain.addBlock({
-      miner:"Gabriel",
-      hash:"123456"
-    } as Block);
+    this.blockchain.addBlock("Gabriel",1000);
     console.log(this.blockchain.getBlocks());
     
   }

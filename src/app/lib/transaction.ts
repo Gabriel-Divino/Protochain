@@ -34,7 +34,7 @@ export default class Transaction{
         this.from = tx?.from || "";
         this.timestamp = tx?.timestamp || Date.now();
         this.value = tx?.value || 0;
-        this.type = tx?.type || TransactionType.REGULAR;
+        this.type = tx.type;
         this.signature = tx?.signature || "";
     }
 
@@ -63,6 +63,7 @@ export default class Transaction{
 
         const signatureIsValid : boolean = Wallet.verifySignature(message,this.signature,this.from);
 
+        
         if(!signatureIsValid) return new Validation(false,"Signature is invalid");
 
         const blockchain : Blockchain = new Blockchain();

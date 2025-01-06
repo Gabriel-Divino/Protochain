@@ -3,6 +3,7 @@ import Blockchain from '../lib/blockchain';
 import Wallet from '../lib/wallet';
 import Transaction from '../lib/transaction';
 import Validation from '../lib/validation';
+import { TransactionType } from '../lib/transactionType';
 
 
 interface Miner {
@@ -98,7 +99,8 @@ export class WalletsComponent implements OnInit{
       const tx : Transaction = new Transaction({
         from:from.publicKey,
         to:to,
-        value:parseInt(value),
+        value:parseInt(value) - 1,
+        type:TransactionType.REGULAR
 
       } as Transaction);
 
@@ -112,6 +114,21 @@ export class WalletsComponent implements OnInit{
       this.blockchain.addTransactions(tx);
       console.log(this.blockchain.getMemPool());
 
+
+      const txFee : Transaction = new Transaction({
+          value:1,
+          to:this.blockchain.getOwner().publicKey,
+          from:from.publicKey,
+          type:TransactionType.FEE
+      }as Transaction);
+
+      txFee.signature = from.signMessage(txFee.getMessage());
+      this.blockchain.addTransactions(txFee);
+      console.log(this.blockchain.getNextBlock());
+  }
+
+  walletBalance(wallet : Wallet) : number {
+    return this.blockchain.getBalance(wallet.publicKey);
   }
 
 }
