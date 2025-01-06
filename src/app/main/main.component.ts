@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Blockchain from '../lib/blockchain';
 import Block from '../lib/block';
+import Transaction from '../lib/transaction';
 
 @Component({
   selector: 'app-main',
@@ -12,20 +13,20 @@ export class MainComponent implements OnInit {
 
 
   blockchain:Blockchain = new Blockchain();
+  transactions : Transaction[] | undefined = [];
+  blocks : Block[] | undefined =  [];
 
   ngOnInit(): void {
 
-    console.log(this.blockchain.getBlocks());
+    this.blocks = this.blockchain.getBlocks();
+    this.transactions = this.blocks?.map((b)=>b.transactions).flat();
+
   }
 
-  createBlock(){
-    this.blockchain.addBlock("Gabriel",1000);
-    console.log(this.blockchain.getBlocks());
-    
-  }
 
   clear() : void{
     this.blockchain.clear()
+    window.alert('Blockchain Zerada !');
   }
 
 }

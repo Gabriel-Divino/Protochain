@@ -4,6 +4,7 @@ import Wallet from "./wallet";
 import Transaction from "./transaction";
 import { TransactionType } from "./transactionType";
 import Validation from "./validation";
+import TransactionEntry from "./transactionEntry";
 
 
 interface BlockInfo{
@@ -16,6 +17,12 @@ interface BlockInfo{
 
 }
 
+
+export interface AddBlockResponse {
+    isValid : Validation,
+    block : Block
+}
+
 export default class Blockchain{
 
     private blocks : Block[] =  [] as Block[];
@@ -24,8 +31,8 @@ export default class Blockchain{
     private genesis : Wallet;
     private privateKeyGenesisWallet : string = "15bb850d56d744da6ad15725034118c9881785d7004c6f0f4f860aaba1e5f9a4";
     private privateKeyOwnerWallet : string = "15441fec09cd9010eb753075a652174ccd9906409508a986c53d00f357b76ff9";
-    private mempool : Transaction[] = [] as Transaction[];
-    static difficulty : number = 0;
+    private mempool : TransactionEntry[] = [] as TransactionEntry[];
+    static difficulty : number = 1;
 
     constructor() {
         this.owner = new Wallet("Owner",this.privateKeyOwnerWallet);
@@ -135,16 +142,26 @@ export default class Blockchain{
         
     }
 
-    getMemPool() : Transaction[]{
+    getMemPool() : TransactionEntry[]{
         return this.mempool;
     }
 
 
-    addTransactions(transaction : Transaction) : void {
+    addTransactions(txEntry : TransactionEntry) : void {
 
-        if(transaction.isValid(transaction.getMessage()).status == true){
-            this.mempool.push(transaction);
+
+        const txFee : Transaction = txEntry.txFee;
+        const txRegular : Transaction = txEntry.txRegular;
+
+        if(this.mempool.some((tx)=>tx.txRegular.from == txRegular.from)) return;
+
+        if(txEntry.isValid().status){
+            if(txFee.isValid(txFee.getMessage()) && txRegular.isValid(txRegular.getMessage())){
+                this.mempool.push(txEntry);
+            }
         }
+
+    
     }
 
 
@@ -156,28 +173,15 @@ export default class Blockchain{
 
         if(!this.mempool.length) return null;
 
-        // Obtém as transações regulares limitadas a 2
-        const transactionsRegular: Transaction[] = this.mempool
-            .filter((tx) => tx.type === TransactionType.REGULAR)
-            .slice(0, 4);
-    
-        // Obtém as transações do tipo fee
-        const transactionsFee: Transaction[] = this.mempool
-            .filter((tx) => tx.type === TransactionType.FEE);
-    
-        // Combina as transações regulares com as transações de fee associadas
-        const transactions: Transaction[] = [];
-    
-        transactionsRegular.forEach((regularTx) => {
-            // Adiciona a transação regular
-            transactions.push(regularTx);
-    
-            // Busca as transações de fee associadas pelo campo "from"
-            const associatedFees = transactionsFee.filter((feeTx) => feeTx.from === regularTx.from);
-    
-            // Adiciona as transações de fee associadas
-            transactions.push(...associatedFees);
-        });
+
+        const transactions : Transaction[] = [] as Transaction[];
+
+        const transactionsEntry: TransactionEntry[] = this.mempool.slice(0,2);
+        
+        transactionsEntry.forEach((txEntry)=>{
+            transactions.push(txEntry.txFee);
+            transactions.push(txEntry.txRegular);
+        })
     
         // Define o próximo bloco
         const nextBlock: BlockInfo = {
@@ -217,29 +221,39 @@ export default class Blockchain{
     addBlock(
         miner: string,
         nonce: number
-    ): Validation {
+    ) : AddBlockResponse
+    {   
+
+        const blockResponse : AddBlockResponse = {} as AddBlockResponse;
+
         const block: Block = new Block({} as Block);
         const nextBlock: BlockInfo | null = this.getNextBlock();
-        if (!nextBlock) return new Validation(false, "There are no transactions in the mempool");
+        if (!nextBlock?.transactions.length){
+
+            blockResponse.block = block;
+            blockResponse.isValid = new Validation(false,'No transactions in the mempool')
+            return blockResponse;
+        }
     
         const transactions: Transaction[] = nextBlock.transactions;
-    
-        const transactionFee: (Transaction | null)[] = transactions
-            .filter((tx) => tx?.type == TransactionType.FEE)
-            .map((tx) => this.transactionFee(miner));
-    
-        // Valida se existem transações inválidas
-        if (transactionFee.filter((tx) => tx == null).length > 1)
-            return new Validation(false, "Invalid transactions");
-    
-        // Filtra e concatena apenas transações válidas
-        const validTransactionFee = transactionFee.filter(
-            (tx): tx is Transaction => tx !== null
-        );
-        transactions.concat(validTransactionFee);
-    
+        
+        const transactionMinerFees : Transaction[] = nextBlock.transactions
+        .filter((tx) => tx.type == TransactionType.FEE);
+
+
+        transactionMinerFees.forEach((tx,index,array)=>{
+
+            let transaction : Transaction | null = this.transactionFee(miner);
+            if(transaction){
+                transactions.push(transaction);
+            }
+            
+        })
+
+        const txs : Transaction[] = transactions.filter((tx)=>tx.isValid(tx.getMessage()).status == true);
+
         block.index = nextBlock.index;
-        block.transactions = nextBlock.transactions;
+        block.transactions = txs;
         block.miner = miner;
         block.nonce = nonce;
         block.previousHash = nextBlock.previousHash;
@@ -247,9 +261,19 @@ export default class Blockchain{
     
         const isValid: Validation = block.isValid(Blockchain.difficulty);
     
-        if (isValid.status) this.blocks.push(block);
+        if (isValid.status){
+            this.blocks.push(block);
+            this.mempool.splice(0,4);
+            this.nextIndex+=1;
+            this.saveBlockchain();
+        }
+
+        console.log(block)
+
+        blockResponse.block = block;
+        blockResponse.isValid = isValid;
     
-        return isValid;
+        return blockResponse;
     }
     
 
