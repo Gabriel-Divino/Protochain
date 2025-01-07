@@ -1,0 +1,29 @@
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-break {
+    word-wrap: break-word;
+    white-space: normal;
+  }
+  
+  h2 {
+    font-weight: bold;
+    color: #343a40;
+  }
+  
+  .card-header {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .row {
+    margin-bottom: 10px;
+  }
+  
+  p {
+    margin: 0;
+  }
+  

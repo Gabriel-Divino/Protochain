@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import Blockchain from '../lib/blockchain';
 import Block from '../lib/block';
 import Transaction from '../lib/transaction';
+import { transactionType } from '../lib/utils';
 
 @Component({
   selector: 'app-main',
@@ -21,6 +22,10 @@ export class MainComponent implements OnInit {
     this.blocks = this.blockchain.getBlocks();
     this.transactions = this.blocks?.map((b)=>b.transactions).flat();
 
+  }
+
+  transactionType(n:number) : string{
+    return transactionType(n);
   }
 
 

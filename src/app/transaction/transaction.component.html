@@ -1,1 +1,43 @@
-<p>transaction works!</p>
+<app-header></app-header>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Detalhes da Transação</h2>
+    <div class="card shadow-lg">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Transação</h5>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <strong>De:</strong>
+            <p>{{ transaction.from }}</p>
+          </div>
+          <div class="col-md-6">
+            <strong>Para:</strong>
+            <p>{{ transaction.to }}</p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <strong>Valor:</strong>
+            <p>{{ transaction.value }}</p>
+          </div>
+          <div class="col-md-4">
+            <strong>Tipo:</strong>
+            <p>{{ transactionType(transaction.type) }}</p>
+          </div>
+          <div class="col-md-4">
+            <strong>Timestamp:</strong>
+            <p>{{ transaction.timestamp | date: 'medium' }}</p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <strong>Assinatura:</strong>
+            <p class="text-break">{{ transaction.signature }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

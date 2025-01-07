@@ -1,1 +1,36 @@
-<p>balances works!</p>
+<app-header></app-header>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Detalhes da Carteira</h2>
+  
+    <!-- Informações da Carteira -->
+    <div class="card shadow-lg mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Carteira: {{ walletId }}</h5>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <strong>Saldo:</strong>
+            <p>{{ balance }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Transações Relacionadas -->
+    <h4 class="mb-3">Transações Envolvidas ({{ transactions?.length }})</h4>
+    <div class="transaction-cards">
+      <div *ngFor="let transaction of transactions" class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <p><strong>De:</strong> {{ transaction.from }}</p>
+          <p><strong>Para:</strong> {{ transaction.to }}</p>
+          <p><strong>Valor:</strong> {{ transaction.value }}</p>
+          <p><strong>Tipo:</strong> {{ transactionType(transaction.type) }}</p>
+          <p><strong>Timestamp:</strong> {{ transaction.timestamp | date: 'short' }}</p>
+          <p><strong>Assinatura:</strong> <span class="text-break">{{ transaction.signature }}</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

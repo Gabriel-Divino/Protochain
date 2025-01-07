@@ -1,1 +1,58 @@
-<p>blocks works!</p>
+<app-header></app-header>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Detalhes do Bloco</h2>
+    <div class="card shadow-lg">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Bloco #{{ block.index }}</h5>
+      </div>
+      <div class="card-body">
+        <!-- Informações do bloco -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <strong>Timestamp:</strong>
+            <p>{{ block.timestamp | date: 'medium' }}</p>
+          </div>
+          <div class="col-md-6">
+            <strong>Nonce:</strong>
+            <p>{{ block.nonce }}</p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <strong>Hash:</strong>
+            <p class="text-break">{{ block.hash }}</p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <strong>Hash Anterior:</strong>
+            <p class="text-break">{{ block.previousHash }}</p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <strong>Minerador:</strong>
+            <p>{{ block.miner }}</p>
+          </div>
+        </div>
+  
+        <!-- Transações -->
+        <h4 class="mt-4">Transações ({{ block.transactions.length }})</h4>
+        <div class="transaction-cards">
+          <div *ngFor="let transaction of block.transactions" class="card mb-3 shadow-sm">
+            <div class="card-body">
+              <p><strong>De:</strong> {{ transaction.from }}</p>
+              <p><strong>Para:</strong> {{ transaction.to }}</p>
+              <p><strong>Valor:</strong> {{ transaction.value }}</p>
+              <p><strong>Tipo:</strong> {{ transactionType(transaction.type) }}</p>
+              <p><strong>Timestamp:</strong> {{ transaction.timestamp | date: 'short' }}</p>
+              <p><strong>Assinatura:</strong> <span class="text-break">{{ transaction.signature }}</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
