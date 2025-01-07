@@ -14,7 +14,7 @@ export const routes: Routes = [
     { path: 'wallets', component: WalletsComponent },  
     { path: 'transactions/:tx', component: TransactionComponent },
     { path: 'balances/:wallet', component: BalancesComponent },
-    { path: 'blocks/:block', component: BalancesComponent },
+    { path: 'blocks/:block', component: BlocksComponent },
 
 ];
 

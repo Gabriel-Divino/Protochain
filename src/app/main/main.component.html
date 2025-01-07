@@ -7,21 +7,21 @@
     <div *ngFor="let block of blocks" class="block">
       <h2>Bloco #{{ block.index }}</h2>
       <div class="block-details">
-        <p><strong>Hash:</strong> {{ block.hash }}</p>
-        <p><strong>Miner:</strong> {{ block.miner }}</p>
+        <p><strong>Hash:</strong> bk{{ block.hash }}</p>
+        <p><strong>Miner:</strong> w{{ block.miner }}</p>
         <p><strong>Nonce:</strong> {{ block.nonce }}</p>
         <p><strong>Timestamp:</strong> {{ block.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}</p>
-        <p><strong>Previous Hash:</strong> {{ block.previousHash }}</p>
+        <p><strong>Previous Hash:</strong> bk{{ block.previousHash }}</p>
       </div>
 
       <div class="transactions">
         <h3>Transações</h3>
         <div *ngFor="let transaction of block.transactions" class="transaction">
-          <p><span>De:</span> {{ transaction.from }}</p>
-          <p><span>Para:</span> {{ transaction.to }}</p>
-          <p><span>Valor:</span> {{ transaction.value }} ETH</p>
-          <p><span>Tipo:</span> {{ transaction.type }}</p>
-          <p><span>Assinatura:</span> {{ transaction.signature }}</p>
+          <p><span>De:</span> w{{ transaction.from }}</p>
+          <p><span>Para:</span> w{{ transaction.to }}</p>
+          <p><span>Valor:</span> {{ transaction.value }}</p>
+          <p><span>Tipo:</span> {{ transactionType(transaction.type) }}</p>
+          <p><span>Assinatura:</span> tx{{ transaction.signature }}</p>
           <p><span>Timestamp:</span> {{ transaction.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}</p>
         </div>
       </div>

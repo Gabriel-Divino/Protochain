@@ -1,19 +1,16 @@
 <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Blockchain</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" routerLink="/wallets">Carteiras</a>
-          </li>
-        </ul>
-        <div class="d-flex" role="search">
-          <input class="form-control me-2" [(ngModel)]="query" type="search" placeholder="Procurar Por Blocos , Transações ou Carteiras" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit" (click)="search()">Pesquisar</button>
-        </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">Blockchain</a>
+    <div class="navbar-collapse show" id="navbarSupportedContent"> <!-- Removido o botão e ajustada a classe para exibir os itens -->
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/wallets">Carteiras</a>
+        </li>
+      </ul>
+      <div class="d-flex" role="search">
+        <input class="form-control me-2" [(ngModel)]="query" type="search" placeholder="Procurar Por Blocos , Transações ou Carteiras" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit" (click)="search()">Pesquisar</button>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>

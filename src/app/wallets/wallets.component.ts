@@ -63,30 +63,30 @@ export class WalletsComponent implements OnInit{
   }
 
   mining(wallet : Wallet){
-    const w : Miner | undefined = this.miners.find((w)=>w.wallet.publicKey == wallet.publicKey);
-    let nonce : number = 0;
-    if(w?.mining == true){
-      //console.log(`${wallet.name} começou a minerar`)
-      let success : boolean = false;
-      for(let i = 0;i<=10000;i++){
-        const mine : AddBlockResponse = this.blockchain.addBlock(wallet.publicKey,nonce)
-        nonce+=1;
-        if(mine.isValid.status){
-          console.log(`${wallet.name} minerou o bloco : ${mine.block.index} `);
-          success=true;
-          
+
+      const w : Miner | undefined = this.miners.find((w)=>w.wallet.publicKey == wallet.publicKey);
+      let nonce : number = 0;
+      if(w?.mining == true){
+        //console.log(`${wallet.name} começou a minerar`)
+        let success : boolean = false;
+        for(let i = 0;i<=10000;i++){
+          const mine : AddBlockResponse = this.blockchain.addBlock(wallet.publicKey,nonce)
+          nonce+=1;
+          if(mine.isValid.status){
+            console.log(`${wallet.name} minerou o bloco : ${mine.block.index} `);
+            success=true;
+            
+          }
+        }
+        if(success == false){
+          //console.log(`${wallet.name} não conseguiu minerar :(`);
+          setTimeout(()=>{
+            this.pauseMining(wallet);
+          },2000)
         }
       }
-      //this.cdr.detectChanges();
-      if(success == false){
-        //console.log(`${wallet.name} não conseguiu minerar :(`);
-        setTimeout(()=>{
-          this.pauseMining(wallet);
-        },2000)
-      }
-    }else{
-      //console.log(`${wallet.name} parou de minerar`);
-    }
+
+
   }
 
   mine(wallet : Wallet) : void {

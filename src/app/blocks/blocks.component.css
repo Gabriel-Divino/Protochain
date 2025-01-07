@@ -1,0 +1,29 @@
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-break {
+    word-wrap: break-word;
+    white-space: normal;
+  }
+  
+  .transaction-cards .card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .transaction-cards .card-body {
+    padding: 1rem 1.5rem;
+  }
+  
+  .transaction-cards .card p {
+    margin-bottom: 0.5rem;
+  }
+  
+  h2 {
+    font-weight: bold;
+    color: #343a40;
+  }
+  
